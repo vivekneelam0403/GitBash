@@ -45,44 +45,41 @@ def addSalesTax(price):
     return price*1.09
 
 ### Main Program ###
+while True: 
+    print("------------------------------------------------------------")
+    # read inputs
+    movie = int(input("Enter the movie # (1,2,3,4): "))
+    if movie not in range(1, 5):
+        print("Invalid input. Please enter a valid movie number (1-4).")
+        continue
 
-# read inputs
-movie = int(input("Enter the movie # (1,2,3,4): "))
-numPeople = int(input("Enter the number of people: "))
-isMemberPrompt = str(input("Are you a member. Enter true or false: ")).lower()
+    numPeople = int(input("Enter the number of people: "))
+    isMemberPrompt = str(input("Are you a member. Enter true or false: ")).lower()
 
-# Input validations
-if isMemberPrompt == "true":
-    isMemberPrompt = True
-elif isMemberPrompt == "false":
-    isMemberPrompt = False
-else:
-    print("Invalid input. Please enter 'True' or 'False'.")
-    sys.exit() 
+    # Input validations
+    if isMemberPrompt == "true":
+        isMemberPrompt = True
+    elif isMemberPrompt == "false":
+        isMemberPrompt = False
+    else:
+        print("Invalid input. Please enter 'True' or 'False'.")
+        continue
 
-if movie not in range(1, 5):
-    print("Invalid input. Please enter a valid movie number (1-4).")
-    sys.exit()
+    # Get Movie Ticket Price by Movie Name
+    moviePrice = findMoviePriceByName(movie)
 
-# Get Movie Ticket Price by Movie Name
-moviePrice = findMoviePriceByName(movie)
+    # Caludate the bill for the group
+    finalTicketPrice = numPeople * moviePrice
 
+    # Apply eligible Discounts
+    finalTicketPrice = addDiscountByNumOfPeople(numPeople, finalTicketPrice)
+    finalTicketPrice = addDiscountByMembership(finalTicketPrice, isMemberPrompt)
 
+    # Add Sales Tax 
+    finalTicketPrice = addSalesTax(finalTicketPrice)
 
-
-# Caludate the bill for the group
-finalTicketPrice = numPeople * moviePrice
-
-
-# Apply eligible Discounts
-finalTicketPrice = addDiscountByNumOfPeople(numPeople, finalTicketPrice)
-finalTicketPrice = addDiscountByMembership(finalTicketPrice, isMemberPrompt)
-
-# Add Sales Tax 
-finalTicketPrice = addSalesTax(finalTicketPrice)
-
-# Print the Final price
-print(round(finalTicketPrice, 2))
+    # Print the Final price
+    print(round(finalTicketPrice, 2))
 
 
 
