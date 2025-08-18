@@ -3,6 +3,13 @@
     # Is a member: 15% 
 
 ### English ###
+# Ask user if they want to option 1 (create a booking)
+# option 2 (add a movie), or option 3 (delete a movie) 
+    # If user selects option 1, take user to create a booking
+    # If user selects option 2, take user to add a movie to list
+    # If user selects option 3, take user to delete a movie to list 
+
+#### Create a booking ####
 
 # Take user inputs (movie name, number of people, is a member or not)
 # Find the movie price
@@ -12,24 +19,30 @@
 # add saleTax to finalTicketPrice (9%)
 # Print finalTicketPrice
 
+#### Add a movie to list ####
+
+# Take user input (movie name)
+# add movie name to list of movies
+
+#### Delete a movie to list #### 
+
+# Take user input (movie name)
+# delete movie from list of movies 
+
+
 ### Functions ###
 
 import sys
 
+def findMoviePriceByName(movie, moviesList):
 
-def findMoviePriceByName(movie):
-    if movie == 1: 
-        moviePrice = 12 
-    elif movie == 2: 
-        moviePrice = 15
-    elif movie == 3: 
-        moviePrice = 10
-    elif movie == 4: 
-        moviePrice = 12
-    else: 
-        print("Please enter a valid movie")
-        moviePrice = 0 
-    return moviePrice
+    index = movie - 1  
+    # if 0 <= index (index >= 0 ) and index < len of movie list
+    if (index >= 0) and (index < len(moviesList)):
+        return moviesList[index][1]  
+    else:
+        return None
+
 
 def addDiscountByNumOfPeople(numPeople, price):
     if numPeople >= 6:
@@ -45,41 +58,80 @@ def addSalesTax(price):
     return price*1.09
 
 ### Main Program ###
+moviesList = []
+
 while True: 
     print("------------------------------------------------------------")
     # read inputs
-    movie = int(input("Enter the movie # (1,2,3,4): "))
-    if movie not in range(1, 5):
-        print("Invalid input. Please enter a valid movie number (1-4).")
-        continue
 
-    numPeople = int(input("Enter the number of people: "))
-    isMemberPrompt = str(input("Are you a member. Enter true or false: ")).lower()
+    # Ask user if they want to option 1 (create a booking)
+    # option 2 (add a movie), or option 3 (delete a movie) 
+    print ("Option 1: Create a booking")
+    print ("Option 2: Add a movie")
+    print ("Option 3: Delete a movie")
+    print ("Option 4: Quit Program \n")
+    operation = int(input("Enter your choice: "))
+    print()
+    
 
-    # Input validations
-    if isMemberPrompt == "true":
-        isMemberPrompt = True
-    elif isMemberPrompt == "false":
-        isMemberPrompt = False
-    else:
-        print("Invalid input. Please enter 'True' or 'False'.")
-        continue
+    if operation == 1:
+        print("The current movies playing are: ")
+        listindex = 0
+        while (listindex < len(moviesList)):
+            print(f"{listindex+1}. {moviesList[listindex]}")
+            listindex += 1
 
-    # Get Movie Ticket Price by Movie Name
-    moviePrice = findMoviePriceByName(movie)
+        movie = int(input("Enter the movie number: "))
+        numPeople = int(input("Enter the number of people: "))
+        isMemberPrompt = str(input("Are you a member. Enter true or false: ")).lower()
 
-    # Caludate the bill for the group
-    finalTicketPrice = numPeople * moviePrice
+        # Input validations
+        if isMemberPrompt == "true":
+            isMemberPrompt = True
+        elif isMemberPrompt == "false":
+            isMemberPrompt = False
+        else:
+            print("Invalid input. Please enter 'True' or 'False'.")
+            continue
 
-    # Apply eligible Discounts
-    finalTicketPrice = addDiscountByNumOfPeople(numPeople, finalTicketPrice)
-    finalTicketPrice = addDiscountByMembership(finalTicketPrice, isMemberPrompt)
+        # Get Movie Ticket Price by Movie Name
+        moviePrice = findMoviePriceByName(movie, moviesList)
 
-    # Add Sales Tax 
-    finalTicketPrice = addSalesTax(finalTicketPrice)
+        # Caludate the bill for the group
+        finalTicketPrice = numPeople * moviePrice
 
-    # Print the Final price
-    print(round(finalTicketPrice, 2))
+        # Apply eligible Discounts
+        finalTicketPrice = addDiscountByNumOfPeople(numPeople, finalTicketPrice)
+        finalTicketPrice = addDiscountByMembership(finalTicketPrice, isMemberPrompt)
+
+        # Add Sales Tax 
+        finalTicketPrice = addSalesTax(finalTicketPrice)
+
+        # Print the Final price
+        print ("Your ticket price is: ")
+        print(round(finalTicketPrice, 2))
+    elif operation == 2: 
+        addMovieName = str(input("Enter a movie: "))
+        addMoviePrice = int(input("Enter the price of the movie: "))
+        movieList = (addMovieName, addMoviePrice)
+        moviesList.append(movieList)
+        print (f"The current movies are: {moviesList}")
+    elif operation == 3:
+        if moviesList == []:
+            print("There are no movies to delete")
+            continue
+        addMovieName = str(input("Enter a movie: "))
+        for moviePairs in moviesList:
+            if moviePairs[0] == addMovieName: 
+                moviesList.remove(moviePairs)
+        print(f"The current movies are: {moviesList}")
+    elif operation == 4: 
+        print("Quitting program... \n")
+        break
+    else: 
+        print ("Invalid Input. Please enter a valid input")
+print("Have a nice day!")
+
 
 
 
@@ -129,3 +181,29 @@ while True:
 # ismember: 
 # salesTax = 9% 
 # Output: Errror. Please enter a valid input(s) 
+
+#### TESTCASES 2 ####
+
+# CASE 1
+# Inputs: 
+# 
+# moviename: hello 
+# Output: ['hello']
+
+# CASE 2 
+# Inputs:
+# 
+# deletemoviename: hello
+# Output: []
+
+# CASE 3 
+# Inputs: 
+# 
+# moviename: 
+# Output: []
+
+# CASE 3 
+# Inputs: 
+#
+# moviename: 3
+# Output: Invalid Input 
