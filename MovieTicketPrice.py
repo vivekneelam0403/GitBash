@@ -34,15 +34,11 @@
 
 import sys
 
-def findMoviePriceByName(movie, moviesList):
-
-    index = movie - 1  
-    # if 0 <= index (index >= 0 ) and index < len of movie list
-    if (index >= 0) and (index < len(moviesList)):
-        return moviesList[index][1]  
+def findMoviePriceByName(movieIndex, moviesList):
+    if (movieIndex-1 >= 0) and (movieIndex-1 < len(moviesList)):
+        return moviesList[movieIndex-1][1]  
     else:
         return None
-
 
 def addDiscountByNumOfPeople(numPeople, price):
     if numPeople >= 6:
@@ -63,9 +59,6 @@ moviesList = []
 while True: 
     print("------------------------------------------------------------")
     # read inputs
-
-    # Ask user if they want to option 1 (create a booking)
-    # option 2 (add a movie), or option 3 (delete a movie) 
     print ("Option 1: Create a booking")
     print ("Option 2: Add a movie")
     print ("Option 3: Delete a movie")
@@ -73,7 +66,6 @@ while True:
     operation = int(input("Enter your choice: "))
     print()
     
-
     if operation == 1:
         print("The current movies playing are: ")
         listindex = 0
@@ -81,21 +73,27 @@ while True:
             print(f"{listindex+1}. {moviesList[listindex]}")
             listindex += 1
 
-        movie = int(input("Enter the movie number: "))
-        numPeople = int(input("Enter the number of people: "))
-        isMemberPrompt = str(input("Are you a member. Enter true or false: ")).lower()
+        movieNum = int(input("Enter the movie number: "))
+        if movieNum > len(moviesList):
+            print ("Please enter a valid input.")
+            continue
 
-        # Input validations
-        if isMemberPrompt == "true":
+        numPeople = int(input("Enter the number of people: "))
+        if numPeople <= 0:
+            print ("Please enter a valid input")
+            continue
+        
+        isMemberPrompt = str(input("Are you a member (yes or no): ")).lower()
+        if isMemberPrompt == "yes":
             isMemberPrompt = True
-        elif isMemberPrompt == "false":
+        elif isMemberPrompt == "no":
             isMemberPrompt = False
         else:
             print("Invalid input. Please enter 'True' or 'False'.")
             continue
 
         # Get Movie Ticket Price by Movie Name
-        moviePrice = findMoviePriceByName(movie, moviesList)
+        moviePrice = findMoviePriceByName(movieNum, moviesList)
 
         # Caludate the bill for the group
         finalTicketPrice = numPeople * moviePrice
@@ -115,16 +113,32 @@ while True:
         addMoviePrice = int(input("Enter the price of the movie: "))
         movieList = (addMovieName, addMoviePrice)
         moviesList.append(movieList)
-        print (f"The current movies are: {moviesList}")
+        print (f"The current movies are:")
+        listindex = 0
+        while (listindex < len(moviesList)):
+            print(f"{listindex+1}. {moviesList[listindex]}")
+            listindex += 1
     elif operation == 3:
+        print (f"The current movies are:")
+        listindex = 0
+        while (listindex < len(moviesList)):
+            print(f"{listindex+1}. {moviesList[listindex][0]}")
+            listindex += 1
         if moviesList == []:
             print("There are no movies to delete")
             continue
-        addMovieName = str(input("Enter a movie: "))
+        addMovieName = str(input("Enter the movie to be deleted: "))
         for moviePairs in moviesList:
             if moviePairs[0] == addMovieName: 
                 moviesList.remove(moviePairs)
-        print(f"The current movies are: {moviesList}")
+            else: 
+                print ("Sorry. That movie does not exist")
+                continue
+        print("The current movies playing are: ")
+        listindex = 0
+        while (listindex < len(moviesList)):
+            print(f"{listindex+1}. {moviesList[listindex][0]}")
+            listindex += 1
     elif operation == 4: 
         print("Quitting program... \n")
         break
@@ -206,4 +220,12 @@ print("Have a nice day!")
 # Inputs: 
 #
 # moviename: 3
+# Output: Invalid Input 
+
+#### TESTCASES 3 ####
+
+# CASE 1 
+# Inputs: 
+#
+# moviename (only 3): 5
 # Output: Invalid Input 
