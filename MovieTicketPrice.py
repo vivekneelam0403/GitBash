@@ -1,6 +1,8 @@
 # Discounts
     # 6 or more people: 10% 
-    # Is a member: 15% 
+    # Is a member: 15%
+
+# Vivek: Created a new line
 
 ### English ###
 # Ask user if they want to option 1 (create a booking)
